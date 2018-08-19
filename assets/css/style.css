@@ -1,0 +1,104 @@
+/* Personal Styles */
+
+body {
+  /* Remove margins and padding around content */
+  margin: 0;
+  padding: 0;
+  /* Fix background during scrolling */
+  background-attachment: fixed;
+  /* Use scalable background image (cross borwser) */
+  background-image: url("../images/starwars.jpg");
+  background-position: center center;
+  background-attachment: fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  color: #003A6C;
+
+}
+
+.imgRnd10 {
+  /* Rounded image corners */
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+
+.imgRnd5 {
+  /* Rounded image corners */
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.imageShadow {
+  /* Add drop shadow */
+  -webkit-box-shadow: 2px 2px 3px 2px rgb(107, 107, 175);
+  -moz-box-shadow: 2px 2px 3px 2px rgb(107, 107, 175);
+  box-shadow: 2px 2px 3px 2px rgb(107, 107, 175);
+}
+
+header {
+  text-align: right;
+  padding: 0px 50px 0px 10px;
+  color: rgb(238, 85, 46);
+  /* opacity: 0.9; */
+}
+
+header h1 {
+  font-size: 30px;
+  padding-right: 60px;
+}
+
+.actorCard {
+  border: 4px solid rgb(9, 216, 9);
+  width: 140px;
+  background-color: white;
+  text-align: center;
+  display:inline-block;
+}
+
+.championCard {
+  border: 4px solid blue;
+}
+
+.enemyCard {
+  border: 4px solid red;
+}
+
+.defenderCard {
+  background-color: rgb(248, 163, 163);
+}
+
+.actorImage {
+  height: 110px;
+  margin: 0px 2px 0px 2px;
+}
+
+.container {
+  margin: 5px 10px 5px 40px;
+  /* Set min height to fill larger screens */
+  min-height: 600px;
+}
+
+.gameSign {
+  color: white;
+  background-color: rgb(70, 69, 69);
+  padding: 5px 10px 5px 10px;
+  font-size: 15px;
+}
+
+/*  Media Queries ...................... */
+
+@media screen and (max-width: 767px) {
+  header h1 {
+    font-size: 20px;
+  }
+  
+  /* .actorImage {
+    height: 90px;
+    margin: 0px 0px 0px 0px;
+  }
+   */
+}

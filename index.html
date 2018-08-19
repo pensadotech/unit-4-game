@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Star Wars RPG</title>
+  <link rel="icon" href="./assets/images/jediSymbol.png">
+  <!-- Reset CSS -->
+  <link rel="stylesheet" href="./assets/css/reset.css">
+  <!-- Bootstrap CDN -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <!-- Personal Style -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="display-1">
+      <img class="img-fluid logoImage imgRnd10 imageShadow" src="./assets/images/star-war-logo.png" alt="Star War Logo">
+      <h1>RBG Game</h1>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <!-- Possible charatcrers ........................ -->
+      <div class="row">
+        <div id="possibleActors">
+          <!-- Poosible actors goes here -->
+
+          <!-- mock
+          <div class='actorCard imgRnd10 d-inline-block' data-actor="A3">
+              <span id="actorName" class="d-block">Darth Maul</span>
+              <img class="actorImage img-fluid imgRnd10" src="./assets/images/DarthMaul.png" alt="Darth Maul">
+              <span id="hpoints" class="d-block">123</span>
+            </div> -->
+
+        </div>
+      </div>
+      <!-- Selected charatecter (Champion) ................. -->
+      <div class="row d-block">
+        <div class="row">
+          <div class="gameSign rounded">Your character</div>
+        </div>
+        <div class="row">
+          <div id="selectedChampion">
+            <!--  selected champion goes here  -->
+          </div>
+        </div>
+      </div>
+      <!-- Enemies to attack .................................-->
+      <div class="row d-block">
+        <div class="row">
+          <div class="gameSign rounded">Enemies Available to Attack</div>
+        </div>
+        <div class="row">
+          <div id="possibleEnemies">
+            <!-- possible enemies goes in here -->
+          </div>
+        </div>
+      </div>
+      <!-- Defender ............................................. -->
+      <div class="row d-block">
+        <div class="row">
+          <div class="gameSign rounded">Defender</div>
+        </div>
+        <div class="row">
+          <div id="selectedEnemy">
+            <!-- selected enemy goes here  -->
+          </div>
+        </div>
+      </div>
+      <!-- Fight section .................................... -->
+      <div class="row d-block">
+        <div class="row">
+          <div class="gameSign rounded">Fight Section</div>
+        </div>
+        <div class="row d-block">
+          <button id="btnAttack" type="button" class="btn btn-dark">Attack</button>
+        </div>
+      </div>
+      <!-- Attack statistics and general messages .................. -->
+      <div class="row d-block">
+        <div class="row">
+          <div id="gameMsgTop" class="text-white bg-warning">
+            <!-- Top message goes here -->
+          </div>
+        </div>
+        <div class="row">
+          <div id="gameMstBottom" class="text-white bg-warning">
+            <!-- bottom message goes here -->
+          </div>
+        </div>
+      </div>
+      <!-- Reset button  -->
+      <div class="row d-block">
+        <div class="row ">
+          <button id="btnReset" type="button" class="btn btn-dark">Reset</button>
+        </div>
+      </div>
+    </div>
+    <!-- end container -->
+  </section>
+  <!-- end section -->
+
+  <footer class="footer">
+    <!-- nothing on footer -->
+  </footer>
+
+  <!-- JQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
+  <!-- Game JavaScript  -->
+  <script src="./assets/javascript/game.js"></script>
+
+</body>
+
+</html>
