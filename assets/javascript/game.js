@@ -18,6 +18,7 @@ $(function () {
     this.isSelectedChampion = false;
     this.isSelectedEnemy = false;
     this.isDefitedEnemy = false;
+    this.attackComplexFactor = 5;
     // funcitons 
     this.increaseAttacks = function () {
       this.numberOfAttacks += 1;
@@ -33,7 +34,7 @@ $(function () {
       // Increment attack power base on the numbers of attacks
       // increment attack power after the several attacks
       // to make it more complex
-      if (this.numberOfAttacks > 5) {
+      if (this.numberOfAttacks > this.attackComplexFactor) {
         aPwr = aPwr * this.numberOfAttacks;
       }
       return aPwr;
@@ -286,6 +287,7 @@ $(function () {
        `)
       // Apend to possible actors
       $('#selectedEnemy').append(actorCard);
+      $('#selectedEnemy').fadeIn(1000);
     },
     displayPossibleEnemies() {
       // Reset possible enemies
@@ -317,6 +319,7 @@ $(function () {
           actor.isSelectedChampion = true;
           // Store selected actor (game.selectActor can be used also)
           thisObj.selectedChampion = actor;
+          selectSound.play();
         }
       })
       //log key info
@@ -348,6 +351,7 @@ $(function () {
           actor.isSelectedEnemy = true;
           // Store selected actor (game.selectActor can be used also)
           thisObj.selectedEnemy = actor;
+          selectSound.play();
         }
       })
       //log key info
@@ -411,6 +415,8 @@ $(function () {
       this.displayMessageBottom(''); // clear bottom message
     },
     counterAttack() {
+       
+      attackSound.play();
 
       // Initial Numbers
       console.log('Start Ch Hp: ' + this.selectedChampion.healthPoints);
@@ -437,6 +443,7 @@ $(function () {
     checkAttackStatus() {
 
       if (this.selectedChampion.healthPoints <= 0) {
+        loseSound.play();
         // If champion helath points are zero or less, user lose the game
         // Mark that the game is over
         this.isGameStarted = false;
@@ -454,13 +461,14 @@ $(function () {
         this.selectedEnemy.isDefitedEnemy = true;
         game.wins += 1;
         selectedEnemy = '';
-        $('#selectedEnemy').empty();
+        $('#selectedEnemy').fadeOut(2000);
         this.displayMessageTop('');
         this.displayMessageBottom('');
 
         // are there any enemy left?
         let areMoreEnemies = this.areThereAnyEnemiesLeft();
         if (!areMoreEnemies) {
+          winSound.play();
           this.isGameStarted = false;
           this.isGameOver = true;
           this.disableAttackButton();
@@ -487,6 +495,13 @@ $(function () {
 
   // Initialize game .....................................................
   game.initializeGame('new');
+
+  // Sounds
+  selectSound = new sound('./assets/sounds/selectSound.mp3')
+  attackSound = new sound('./assets/sounds/laserSound.mp3');
+  loseSound = new sound('./assets/sounds/loseSound.mp3');
+  winSound = new sound('./assets/sounds/winSound.mp3');
+
   console.log('Phase: ' + game.phase);
   console.log(game.possibleActorsArr);
 
@@ -543,5 +558,21 @@ $(function () {
 
   }) //  $(document).on('click', '#btnReset'
 
+
+  //  Functions ......................................................
+  function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function () {
+      this.sound.play();
+    }
+    this.stop = function () {
+      this.sound.pause();
+    }
+  }
 
 }) //$(function ()
