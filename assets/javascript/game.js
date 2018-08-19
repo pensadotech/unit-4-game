@@ -5,7 +5,7 @@ $(function () {
   console.log("Star wars RBC game");
 
   // ACTOR Object constructor .........................................
-  function actor(id, name, healthPoints, attackPower, counterAttackPower, imageFile,minPower) {
+  function actor(id, name, healthPoints, attackPower, counterAttackPower, imageFile, minPower) {
     this.actorId = id;
     this.name = name;
     this.healthPoints = healthPoints;
@@ -27,7 +27,9 @@ $(function () {
       // base on available attack power, 
       // use a fraction of that power to attack
       let aPwr = Math.floor(Math.random() * this.attackPower);
-      if (aPwr < this.minPower) { aPwr = this.minPower; }
+      if (aPwr < this.minPower) {
+        aPwr = this.minPower;
+      }
       aPwr = aPwr * this.numberOfAttacks;
       return aPwr;
     };
@@ -35,7 +37,9 @@ $(function () {
       // base on available counter attack power, 
       // use a fraction of that power to attack
       let caPwr = Math.floor(Math.random() * this.counterAttackPower);
-      if (caPwr < this.minPower) { caPwr = this.minPower; }
+      if (caPwr < this.minPower) {
+        caPwr = this.minPower;
+      }
       return caPwr;
     }
   }
@@ -43,10 +47,10 @@ $(function () {
   // ACTOR GENERATOR object  ...............................................
   let actorGenerator = {
     // Properties
-    maxHealthPoints: 140,        // must be divisible by two
-    maxAttackPower: 20,        // must be divisible by two
-    maxCounterAttackPower: 20,  // must be divisible by two
-    minPower : 7,
+    maxHealthPoints: 140, // must be divisible by two
+    maxAttackPower: 20, // must be divisible by two
+    maxCounterAttackPower: 20, // must be divisible by two
+    minPower: 7,
     // Actor fixed properties 
     actorDefinitions: [
       actor1 = {
@@ -90,21 +94,21 @@ $(function () {
     },
     getActors() {
       // Actors array
-      var newActorsArr = [];
+      let newActorsArr = [];
       let thisObj = this;
       //for each actor name, create a new actor object
       this.actorDefinitions.forEach(function (actorDef, index) {
         // Get basic properties from actor
-        var actorId = actorDef.actorId;
-        var actorName = actorDef.name;
-        var imageFile = actorDef.image;
-        // todo: get random values for teh following numbers
-        var healthPoints = thisObj.getHealthPoints();
-        var attackPower = thisObj.getAttackPower();
-        var counterAttackPower = thisObj.getCounterAttackPower();
-        var minPower = thisObj.minPower;
+        let actorId = actorDef.actorId;
+        let actorName = actorDef.name;
+        let imageFile = actorDef.image;
+        // todo: get random values for the following numbers
+        let healthPoints = thisObj.getHealthPoints();
+        let attackPower = thisObj.getAttackPower();
+        let counterAttackPower = thisObj.getCounterAttackPower();
+        let minPower = thisObj.minPower;
         // Initalize actor
-        var obj = new actor(actorId, actorName, healthPoints, attackPower, counterAttackPower, imageFile, minPower);
+        let obj = new actor(actorId, actorName, healthPoints, attackPower, counterAttackPower, imageFile, minPower);
         // Add actor to the array
         newActorsArr.push(obj);
       })
@@ -127,6 +131,7 @@ $(function () {
     selectedChampion: '',
     selectedEnemy: '',
     wins: 0,
+    isGameOver: false,
     // Game initialization
     initializeGame(gameType) {
       // Indicate game has started
@@ -134,11 +139,12 @@ $(function () {
       this.phase = this.gamePhase1;
       // Get initial possibel actors
       this.possibleActorsArr = actorGenerator.getActors();
-      // Render in teh screen 
+      // Render in the screen 
       this.displayPossibleActors();
       this.disableAttackButton();
       this.hideResetButton();
       // messages to the user
+      this.setMessagesNormal();
       this.displayMessageTop('Welcome! Select your character...');
       this.displayMessageBottom('');
       //log key info
@@ -172,10 +178,46 @@ $(function () {
       $('#btnAttack').removeClass('disabled');
     },
     hideResetButton() {
+      $('#btnReset').removeClass('d-block');
+      $('#btnReset').removeClass('btn-primary');
+      $('#btnReset').addClass('btn-dark');
       $('#btnReset').addClass('d-none');
     },
     showResetButton() {
+      $('#btnReset').removeClass('d-none');
+      $('#btnReset').removeClass('btn-dark');
+      $('#btnReset').addClass('btn-primary');
       $('#btnReset').addClass('d-block');
+    },
+    setMessagesSucess() {
+      $('#gameMsgTop').removeClass('bg-danger');
+      $('#gameMsgTop').removeClass('bg-info');
+      $('#gameMsgTop').removeClass('bg-success');
+      $('#gameMsgTop').addClass('bg-success');
+      $('#gameMsgBottom').removeClass('bg-danger');
+      $('#gameMsgBottom').removeClass('bg-info');
+      $('#gameMsgBottom').removeClass('bg-success');
+      $('#gameMsgBottom').addClass('bg-success');
+    },
+    setMessagesNormal() {
+      $('#gameMsgTop').removeClass('bg-danger');
+      $('#gameMsgTop').removeClass('bg-info');
+      $('#gameMsgTop').removeClass('bg-success');
+      $('#gameMsgTop').addClass('bg-info');
+      $('#gameMsgBottom').removeClass('bg-danger');
+      $('#gameMsgBottom').removeClass('bg-info');
+      $('#gameMsgBottom').removeClass('bg-success');
+      $('#gameMsgBottom').addClass('bg-info');
+    },
+    setMessagesFail() {
+      $('#gameMsgTop').removeClass('bg-danger');
+      $('#gameMsgTop').removeClass('bg-info');
+      $('#gameMsgTop').removeClass('bg-success');
+      $('#gameMsgTop').addClass('bg-danger');
+      $('#gameMsgBottom').removeClass('bg-danger');
+      $('#gameMsgBottom').removeClass('bg-info');
+      $('#gameMsgBottom').removeClass('bg-success');
+      $('#gameMsgBottom').addClass('bg-danger');
     },
     displayMessageTop(msg) {
       if (msg === '') {
@@ -186,9 +228,9 @@ $(function () {
     },
     displayMessageBottom(msg) {
       if (msg === '') {
-        $('#gameMstBottom').empty();
+        $('#gameMsgBottom').empty();
       } else {
-        $('#gameMstBottom').html(msg);
+        $('#gameMsgBottom').html(msg);
       }
     },
     displayPossibleActors() {
@@ -262,7 +304,7 @@ $(function () {
     selectChampion(actorId) {
       // store 'this' to make it available
       // inside the foreach
-      var thisObj = this;
+      let thisObj = this;
       // Select the chamption
       this.possibleActorsArr.forEach(function (actor) {
         // if actorID matches, mark as chamption
@@ -270,52 +312,69 @@ $(function () {
           actor.isSelectedChampion = true;
           // Store selected actor (game.selectActor can be used also)
           thisObj.selectedChampion = actor;
-          thisObj.phase = thisObj.gamePhase2;
         }
       })
       //log key info
       console.log('Champion: ' + this.selectedChampion.name);
       console.log('is Champion?: ' + this.selectedChampion.isSelectedChampion);
       console.log(this.phase);
-      // clear all possible actors
-      $('#possibleActors').empty();
-      // Display selected actor
-      this.displayChampionActor();
-      // Display possible enemies
-      this.displayPossibleEnemies();
-      // messages to the user
-      this.displayMessageTop('Select your oponent ...');
-      this.displayMessageBottom('');
+      if (this.selectedChampion !== '') {
+        // Advance game phase
+        this.phase = this.gamePhase2;
+        // clear all possible actors
+        $('#possibleActors').empty();
+        // Display selected actor
+        this.displayChampionActor();
+        // Display possible enemies
+        this.displayPossibleEnemies();
+        // messages to the user
+        this.displayMessageTop('Select your oponent ...');
+        this.displayMessageBottom('');
+      }
     },
     selectEnemy(actorId) {
       // store 'this' to make it available
       // inside the foreach
-      var thisObj = this;
-      // Select the chamption
+      let thisObj = this;
+      // Select the enemy
       this.possibleActorsArr.forEach(function (actor) {
         // if actorID matches, mark as chamption
-        if (actor.actorId === actorId) {
+        if (actor !== thisObj.selectedChampion && actor.actorId === actorId) {
           actor.isSelectedEnemy = true;
           // Store selected actor (game.selectActor can be used also)
           thisObj.selectedEnemy = actor;
-          thisObj.phase = thisObj.gamePhase3;
         }
       })
       //log key info
       console.log('Enemy: ' + this.selectedEnemy.name);
       console.log('is Enemy: ' + this.selectedEnemy.isSelectedEnemy);
       console.log(this.phase);
-      // clear all possible actors
-      $('#possibleEnemies').empty();
-      // re-display remaining possible enemies
-      this.displayPossibleEnemies();
-      // display enemy
-      this.displayEnemyActor();
-      // enable attack
-      this.enableAttackButton();
-      // messages to the user
-      this.displayMessageTop('Ready? press the Attack button!');
-      this.displayMessageBottom('');
+      if (this.selectedEnemy !== '') {
+        // advance game phase
+        this.phase = this.gamePhase3;
+        // re-display remaining possible enemies
+        this.displayPossibleEnemies();
+        // display enemy
+        this.displayEnemyActor();
+        // enable attack
+        this.enableAttackButton();
+        // messages to the user
+        this.displayMessageTop('Ready? press the Attack button!');
+        this.displayMessageBottom('');
+      }
+    },
+    areThereAnyEnemiesLeft() {
+      let areAnyEnemiesLeft = false;
+      let thisObj = this;
+      // loop to see if all enemies are defected
+      this.possibleActorsArr.forEach(function (actor) {
+        // if one actor is not yet defeted, there are still enemies 
+        if (actor !== thisObj.selectedChampion && !actor.isDefitedEnemy) {
+          areAnyEnemiesLeft = true;
+        }
+      })
+      // return 
+      return areAnyEnemiesLeft;
     },
     attack() {
 
@@ -364,72 +423,120 @@ $(function () {
 
       // Display selected actor
       this.displayChampionActor();
-      
+
       // messages to the user
       let msg = this.selectedEnemy.name + ' attacked you back for ' + caPwr + ' points';
       this.displayMessageBottom(msg);
 
-    },
+    }, // counterAttack
     checkAttackStatus() {
-         
-       // If champion helath points are zero or less, user lose the game
-    // show the reset button
 
-    // if the enemy health points are zero or less, user wins
-    // the enemy disapear, and user selects a new contender
+      if (this.selectedChampion.healthPoints <= 0) {
+        // If champion helath points are zero or less, user lose the game
+        // Mark that the game is over
+        this.isGameStarted = false;
+        this.isGameOver = true;
+        this.disableAttackButton();
+        this.setMessagesFail();
+        let msg = this.selectedChampion.name + ' lost the battle, GAME OVER!';
+        this.displayMessageTop(msg);
+        this.displayMessageBottom(''); // clear bottom message
+        //show reset button
+        this.showResetButton();
 
-    }
+      } else if (this.selectedEnemy.healthPoints <= 0) {
+        // if the enemy health points are zero or less, user wins
+        this.selectedEnemy.isDefitedEnemy = true;
+        game.wins += 1;
+        selectedEnemy = '';
+        $('#selectedEnemy').empty();
+        this.displayMessageTop('');
+        this.displayMessageBottom('');
+
+        // are there any enemy left?
+        let areMoreEnemies = this.areThereAnyEnemiesLeft();
+        if (!areMoreEnemies) {
+          this.isGameStarted = false;
+          this.isGameOver = true;
+          this.disableAttackButton();
+          this.setMessagesSucess();
+          let msg = this.selectedChampion.name + ' won the battle, GAME OVER!';
+          this.displayMessageTop(msg);
+          this.displayMessageBottom(''); // clear bottom message
+          //show reset button
+          this.showResetButton();
+        } else {
+          // Ask for selecting the new enemy
+          this.phase = this.gamePhase2;
+          this.disableAttackButton();
+          // messages to the user
+          this.displayMessageTop('Select your new oponent ...');
+          this.displayMessageBottom('');
+        }
+      }
+
+    } // checkAttackStatus
 
   } // end game object
+
 
   // Initialize game .....................................................
   game.initializeGame('new');
   console.log('Phase: ' + game.phase);
   console.log(game.possibleActorsArr);
 
-  // Envents selecting the characters to fight
+  // Envents ....................................................
+
+  // Selecting actors
   $(document).on('click', '.actorCard', function () {
 
-    // get actorid from html attributes
-    let actorId = $(this).attr('data-actor');
-    console.log(actorId);
+    if (game.isGameStarted) {
+      // get actorid from html attributes
+      let actorId = $(this).attr('data-actor');
+      console.log('Selected Actor:' + actorId);
 
-    // Depending on phase, select champion or enemy
-    switch (game.phase) {
-      case game.gamePhase1:
-        // Select the champion actor
-        game.selectChampion(actorId);
-        break;
-      case game.gamePhase2:
-        // Select the enemy
-        game.selectEnemy(actorId);
-        break;
+      // Depending on phase, select champion or enemy
+      switch (game.phase) {
+        case game.gamePhase1:
+          // Select the champion actor
+          game.selectChampion(actorId);
+          break;
+        case game.gamePhase2:
+          // Select the enemy
+          game.selectEnemy(actorId);
+          break;
+      }
     }
-  })
 
+  }) //  $(document).on('click',
+
+  // Attacking
   $(document).on('click', '#btnAttack', function () {
 
     console.log('btn attack pressed');
 
-    // Champion attacks enemy
-    game.attack();
-    // Enemy countes attacks
-    game.counterAttack();
-    // Determine how stil stands
-    game.checkAttackStatus();
+    if (game.isGameStarted && game.phase === game.gamePhase3) {
+      // Champion attacks enemy
+      game.attack();
+      // Enemy countes attacks
+      game.counterAttack();
+      // Determine how stil stands
+      game.checkAttackStatus();
+    }
 
-  })
+  }) // $(document).on('click', '#btnAttack',
 
+  // Reseting the game 
   $(document).on('click', '#btnReset', function () {
 
     console.log('btn reset pressed');
 
+    if (game.isGameOver) {
+      // reset values and start again
+      game.resetGame();
+    }
 
-
-  })
-
-
-
+  }) //  $(document).on('click', '#btnReset'
 
 
 }) //$(function ()
