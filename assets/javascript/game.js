@@ -3,46 +3,50 @@
 $(function () {
 
   console.log("Star wars RBC game");
-  
-  // Phases ....................................................
-  const gamePhase0 = 'undefined';
-  const gamePhase1 = 'Select-Champion';
-  const gamePhase2 = 'Select-Enemy';
-  const gamePhase3 = 'Start-Attack';
 
   // ACTOR Object constructor .........................................
-  function actor(id, name, healthPoints, attackPower, counterAttackPower, imageFile) {
+  function actor(id, name, healthPoints, attackPower, counterAttackPower, imageFile,minPower) {
     this.actorId = id;
     this.name = name;
     this.healthPoints = healthPoints;
     this.attackPower = attackPower;
     this.counterAttackPower = counterAttackPower;
-    this.numberOfAttacks = 0;
     this.imageFile = imageFile;
+    this.minPower = minPower;
+    // Operationproperties
+    this.numberOfAttacks = 0;
     this.isSelectedChampion = false;
     this.isSelectedEnemy = false;
     this.isDefitedEnemy = false;
-    this.randomAttackPower = function() { 
+    // funcitons 
+    this.increaseAttacks = function () {
+      this.numberOfAttacks += 1;
+      return this.numberOfAttacks;
+    };
+    this.increasedAttackPower = function () {
       // base on available attack power, 
       // use a fraction of that power to attack
       let aPwr = Math.floor(Math.random() * this.attackPower);
-      if (aPwr < 3) { aPwr = 5; }
-      return aPwr; 
+      if (aPwr < this.minPower) { aPwr = this.minPower; }
+      aPwr = aPwr * this.numberOfAttacks;
+      return aPwr;
     };
-    this.increaseAttacks = function() {
-      return this.numberOfAttacks =+ 1;
-    };
-    this.randomCounterAttackPower = function() {
+    this.randomCounterAttackPower = function () {
       // base on available counter attack power, 
       // use a fraction of that power to attack
       let caPwr = Math.floor(Math.random() * this.counterAttackPower);
-      if (caPwr < 3) { aPwr = 5; }
-      return caPwr; 
+      if (caPwr < this.minPower) { caPwr = this.minPower; }
+      return caPwr;
     }
   }
 
   // ACTOR GENERATOR object  ...............................................
   let actorGenerator = {
+    // Properties
+    maxHealthPoints: 140,        // must be divisible by two
+    maxAttackPower: 20,        // must be divisible by two
+    maxCounterAttackPower: 20,  // must be divisible by two
+    minPower : 7,
     // Actor fixed properties 
     actorDefinitions: [
       actor1 = {
@@ -68,20 +72,20 @@ $(function () {
     ],
     getHealthPoints() {
       // Every actor will receive random health points
-      // from 100 to 200
-      let hPoints = 100 + Math.floor(Math.random() * 100);
+      let baseHp = this.maxHealthPoints / 2;
+      let hPoints = baseHp + Math.floor(Math.random() * baseHp);
       return hPoints;
     },
     getAttackPower() {
       // every actor will receive random attack powers 
-      // from 2 to 10
-      let aPower = 5 + Math.floor(Math.random() * 5);
+      let basePower = this.maxAttackPower / 2;
+      let aPower = basePower + Math.floor(Math.random() * basePower);
       return aPower;
     },
     getCounterAttackPower() {
       // every actor will receive random counter attack powers 
-      // from 2 to 10
-      let caPower = 5 + Math.floor(Math.random() * 5);
+      let basePower = this.maxCounterAttackPower / 2;
+      let caPower = basePower + Math.floor(Math.random() * basePower);
       return caPower;
     },
     getActors() {
@@ -98,8 +102,9 @@ $(function () {
         var healthPoints = thisObj.getHealthPoints();
         var attackPower = thisObj.getAttackPower();
         var counterAttackPower = thisObj.getCounterAttackPower();
+        var minPower = thisObj.minPower;
         // Initalize actor
-        var obj = new actor(actorId, actorName, healthPoints, attackPower, counterAttackPower, imageFile);
+        var obj = new actor(actorId, actorName, healthPoints, attackPower, counterAttackPower, imageFile, minPower);
         // Add actor to the array
         newActorsArr.push(obj);
       })
@@ -107,12 +112,17 @@ $(function () {
       return newActorsArr;
     }
   }
-  
+
   // GAME Object ...................................................
   let game = {
+    // Phases 
+    gamePhase0: 'undefined',
+    gamePhase1: 'Select-Champion',
+    gamePhase2: 'Select-Enemy',
+    gamePhase3: 'Start-Attack',
     // Properties
     isGameStarted: false,
-    phase: gamePhase0,
+    phase: this.gamePhase0,
     possibleActorsArr: [],
     selectedChampion: '',
     selectedEnemy: '',
@@ -121,7 +131,7 @@ $(function () {
     initializeGame(gameType) {
       // Indicate game has started
       this.isGameStarted = true;
-      this.phase = gamePhase1;
+      this.phase = this.gamePhase1;
       // Get initial possibel actors
       this.possibleActorsArr = actorGenerator.getActors();
       // Render in teh screen 
@@ -141,7 +151,7 @@ $(function () {
       $('#possibleEnemies').empty();
       $('#selectedEnemy').empty();
       // initialize key values
-      this.phase = gamePhase0;
+      this.phase = this.gamePhase0;
       this.possibleActorsArr = [];
       this.selectedChampion = '';
       this.selectedEnemy = '';
@@ -182,6 +192,8 @@ $(function () {
       }
     },
     displayPossibleActors() {
+      // Reset possible actors
+      $('#possibleActors').empty();
       // Build actor card for each pre-defined actors
       this.possibleActorsArr.forEach(function (actor) {
         // Build dive for possible actors
@@ -197,6 +209,8 @@ $(function () {
       })
     },
     displayChampionActor() {
+      // reset champion
+      $('#selectedChampion').empty();
       // Build actor card for selected champion
       let actor = this.selectedChampion;
       // Build dive for possible actors
@@ -211,6 +225,8 @@ $(function () {
       $('#selectedChampion').append(actorCard);
     },
     displayEnemyActor() {
+      // Reset selecte enemy display
+      $('#selectedEnemy').empty();
       // Build actor card for selected champion
       let actor = this.selectedEnemy;
       // Build dive for possible actors
@@ -225,6 +241,8 @@ $(function () {
       $('#selectedEnemy').append(actorCard);
     },
     displayPossibleEnemies() {
+      // Reset possible enemies
+      $('#possibleEnemies').empty();
       this.possibleActorsArr.forEach(function (actor) {
         // Not champion, but remainder actors are possible enemies
         if (!actor.isSelectedChampion && !actor.isSelectedEnemy && !actor.isDefitedEnemy) {
@@ -252,7 +270,7 @@ $(function () {
           actor.isSelectedChampion = true;
           // Store selected actor (game.selectActor can be used also)
           thisObj.selectedChampion = actor;
-          thisObj.phase = gamePhase2;
+          thisObj.phase = thisObj.gamePhase2;
         }
       })
       //log key info
@@ -280,7 +298,7 @@ $(function () {
           actor.isSelectedEnemy = true;
           // Store selected actor (game.selectActor can be used also)
           thisObj.selectedEnemy = actor;
-          thisObj.phase = gamePhase3;
+          thisObj.phase = thisObj.gamePhase3;
         }
       })
       //log key info
@@ -300,44 +318,76 @@ $(function () {
       this.displayMessageBottom('');
     },
     attack() {
-      
-      // Attack power calculation
-      let numAttacks = this.selectedChampion.increaseAttacks();
-      let aPwr = this.selectedChampion.randomAttackPower();
+
+      // Initial numbers
+      console.log('Start En Hp: ' + this.selectedEnemy.healthPoints);
       console.log('max-apwr: ' + this.selectedChampion.attackPower);
-      console.log('aPwr:' + aPwr);
-     
+
+      // increase Attack number
+      let numAttacks = this.selectedChampion.increaseAttacks();
+      console.log('Attack:' + numAttacks);
+
+      // Attack power calculation
+      // attackPower = random attack power x Number of attacks
+      let aPwrPlus = this.selectedChampion.increasedAttackPower();
+      console.log('aPwr++:' + aPwrPlus);
+
       // Affect the enemy health
-      aPwr = aPwr * numAttacks;
-      console.log('aPwr++:' + aPwr);
-      this.selectedEnemy.healthPoints -= aPWr;
-      console.log(this.selectedEnemy.healthPoints);
-      
+      this.selectedEnemy.healthPoints -= aPwrPlus;
+
+      // ending nunmbers
+      console.log('end En Hp: ' + this.selectedEnemy.healthPoints);
+
+      // Display possible enemies
+      this.displayEnemyActor();
+
+      // messages to the user
+      let msg = 'You attacked ' + this.selectedEnemy.name + ' for ' + aPwrPlus + ' points';
+      this.displayMessageTop(msg);
+      this.displayMessageBottom(''); // clear bottom message
     },
     counterAttack() {
+
+      // Initial Numbers
+      console.log('Start Ch Hp: ' + this.selectedChampion.healthPoints);
+      console.log('max capwr: ' + this.selectedEnemy.counterAttackPower);
+
       // counter Attack power calculation
-      let numAttacks = this.selectedChampion.numberOfAttacks;
       let caPwr = this.selectedEnemy.randomCounterAttackPower();
       console.log('caPwr:' + caPwr);
 
       // Affect the champion health
-      this.selectedChampion.healthPoints -= aPWr;
-      console.log(this.selectedChampion.healthPoints);
+      this.selectedChampion.healthPoints -= caPwr;
+
+      // ending numbers
+      console.log('Ch Hp: ' + this.selectedChampion.healthPoints);
+
+      // Display selected actor
+      this.displayChampionActor();
+      
+      // messages to the user
+      let msg = this.selectedEnemy.name + ' attacked you back for ' + caPwr + ' points';
+      this.displayMessageBottom(msg);
 
     },
     checkAttackStatus() {
+         
+       // If champion helath points are zero or less, user lose the game
+    // show the reset button
+
+    // if the enemy health points are zero or less, user wins
+    // the enemy disapear, and user selects a new contender
 
     }
-
 
   } // end game object
 
   // Initialize game .....................................................
   game.initializeGame('new');
   console.log('Phase: ' + game.phase);
-  //console.log(game.possibleActorsArr);
+  console.log(game.possibleActorsArr);
 
-  // Envents selecting teh characters to fight
+  // Envents selecting the characters to fight
   $(document).on('click', '.actorCard', function () {
 
     // get actorid from html attributes
@@ -346,11 +396,11 @@ $(function () {
 
     // Depending on phase, select champion or enemy
     switch (game.phase) {
-      case gamePhase1:
+      case game.gamePhase1:
         // Select the champion actor
         game.selectChampion(actorId);
         break;
-      case gamePhase2:
+      case game.gamePhase2:
         // Select the enemy
         game.selectEnemy(actorId);
         break;
@@ -361,31 +411,20 @@ $(function () {
 
     console.log('btn attack pressed');
 
-    // make an attack from champion to enemy 
     // Champion attacks enemy
     game.attack();
-    
     // Enemy countes attacks
     game.counterAttack();
-    
     // Determine how stil stands
-    game.checkAttackStatus(); 
-
-
-    // If champion helath points are zero or less, user lose the game
-    // show the reset button
-
-    // if the enemy health points are zero or less, user wins
-    // teh enemy disapear, and user selects a new contender
-
+    game.checkAttackStatus();
 
   })
 
   $(document).on('click', '#btnReset', function () {
 
     console.log('btn reset pressed');
-    
-    
+
+
 
   })
 
