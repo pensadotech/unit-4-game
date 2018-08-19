@@ -22,6 +22,23 @@ $(function () {
     this.isSelectedChampion = false;
     this.isSelectedEnemy = false;
     this.isDefitedEnemy = false;
+    this.randomAttackPower = function() { 
+      // base on available attack power, 
+      // use a fraction of that power to attack
+      let aPwr = Math.floor(Math.random() * this.attackPower);
+      if (aPwr < 3) { aPwr = 5; }
+      return aPwr; 
+    };
+    this.increaseAttacks = function() {
+      return this.numberOfAttacks =+ 1;
+    };
+    this.randomCounterAttackPower = function() {
+      // base on available counter attack power, 
+      // use a fraction of that power to attack
+      let caPwr = Math.floor(Math.random() * this.counterAttackPower);
+      if (caPwr < 3) { aPwr = 5; }
+      return caPwr; 
+    }
   }
 
   // ACTOR GENERATOR object  ...............................................
@@ -58,13 +75,13 @@ $(function () {
     getAttackPower() {
       // every actor will receive random attack powers 
       // from 2 to 10
-      let aPower = 2 + Math.floor(Math.random() * 8);
+      let aPower = 5 + Math.floor(Math.random() * 5);
       return aPower;
     },
     getCounterAttackPower() {
       // every actor will receive random counter attack powers 
       // from 2 to 10
-      let caPower = 2 + Math.floor(Math.random() * 8);
+      let caPower = 5 + Math.floor(Math.random() * 5);
       return caPower;
     },
     getActors() {
@@ -283,17 +300,42 @@ $(function () {
       this.displayMessageBottom('');
     },
     attack() {
-
+      
+      // Attack power calculation
+      let numAttacks = this.selectedChampion.increaseAttacks();
+      let aPwr = this.selectedChampion.randomAttackPower();
+      console.log('max-apwr: ' + this.selectedChampion.attackPower);
+      console.log('aPwr:' + aPwr);
+     
+      // Affect the enemy health
+      aPwr = aPwr * numAttacks;
+      console.log('aPwr++:' + aPwr);
+      this.selectedEnemy.healthPoints -= aPWr;
+      console.log(this.selectedEnemy.healthPoints);
+      
     },
     counterAttack() {
+      // counter Attack power calculation
+      let numAttacks = this.selectedChampion.numberOfAttacks;
+      let caPwr = this.selectedEnemy.randomCounterAttackPower();
+      console.log('caPwr:' + caPwr);
+
+      // Affect the champion health
+      this.selectedChampion.healthPoints -= aPWr;
+      console.log(this.selectedChampion.healthPoints);
+
+    },
+    checkAttackStatus() {
 
     }
+
 
   } // end game object
 
   // Initialize game .....................................................
   game.initializeGame('new');
   console.log('Phase: ' + game.phase);
+  //console.log(game.possibleActorsArr);
 
   // Envents selecting teh characters to fight
   $(document).on('click', '.actorCard', function () {
@@ -320,6 +362,15 @@ $(function () {
     console.log('btn attack pressed');
 
     // make an attack from champion to enemy 
+    // Champion attacks enemy
+    game.attack();
+    
+    // Enemy countes attacks
+    game.counterAttack();
+    
+    // Determine how stil stands
+    game.checkAttackStatus(); 
+
 
     // If champion helath points are zero or less, user lose the game
     // show the reset button
@@ -332,7 +383,9 @@ $(function () {
 
   $(document).on('click', '#btnReset', function () {
 
-    console.log('btn attack pressed');
+    console.log('btn reset pressed');
+    
+    
 
   })
 
