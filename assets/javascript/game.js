@@ -30,7 +30,12 @@ $(function () {
       if (aPwr < this.minPower) {
         aPwr = this.minPower;
       }
-      aPwr = aPwr * this.numberOfAttacks;
+      // Increment attack power base on the numbers of attacks
+      // increment attack power after the several attacks
+      // to make it more complex
+      if (this.numberOfAttacks > 5) {
+        aPwr = aPwr * this.numberOfAttacks;
+      }
       return aPwr;
     };
     this.randomCounterAttackPower = function () {
