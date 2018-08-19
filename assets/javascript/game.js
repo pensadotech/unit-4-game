@@ -1,13 +1,16 @@
+// Star war RBG game - javaScript 
+
 $(function () {
 
   console.log("Star wars RBC game");
-
+  
+  // Phases ....................................................
   const gamePhase0 = 'undefined';
   const gamePhase1 = 'Select-Champion';
   const gamePhase2 = 'Select-Enemy';
-  const gamePhase3 = 'Strat-Attack';
+  const gamePhase3 = 'Start-Attack';
 
-  // Actor Object constructor
+  // ACTOR Object constructor .........................................
   function actor(id, name, healthPoints, attackPower, counterAttackPower, imageFile) {
     this.actorId = id;
     this.name = name;
@@ -21,7 +24,7 @@ $(function () {
     this.isDefitedEnemy = false;
   }
 
-  // Actor generator object 
+  // ACTOR GENERATOR object  ...............................................
   let actorGenerator = {
     // Actor fixed properties 
     actorDefinitions: [
@@ -46,9 +49,28 @@ $(function () {
         image: 'KyloRen.jpg'
       }
     ],
+    getHealthPoints() {
+      // Every actor will receive random health points
+      // from 100 to 200
+      let hPoints = 100 + Math.floor(Math.random() * 100);
+      return hPoints;
+    },
+    getAttackPower() {
+      // every actor will receive random attack powers 
+      // from 2 to 10
+      let aPower = 2 + Math.floor(Math.random() * 8);
+      return aPower;
+    },
+    getCounterAttackPower() {
+      // every actor will receive random counter attack powers 
+      // from 2 to 10
+      let caPower = 2 + Math.floor(Math.random() * 8);
+      return caPower;
+    },
     getActors() {
       // Actors array
       var newActorsArr = [];
+      let thisObj = this;
       //for each actor name, create a new actor object
       this.actorDefinitions.forEach(function (actorDef, index) {
         // Get basic properties from actor
@@ -56,9 +78,9 @@ $(function () {
         var actorName = actorDef.name;
         var imageFile = actorDef.image;
         // todo: get random values for teh following numbers
-        var healthPoints = 100;
-        var attackPower = 50;
-        var counterAttackPower = 30;
+        var healthPoints = thisObj.getHealthPoints();
+        var attackPower = thisObj.getAttackPower();
+        var counterAttackPower = thisObj.getCounterAttackPower();
         // Initalize actor
         var obj = new actor(actorId, actorName, healthPoints, attackPower, counterAttackPower, imageFile);
         // Add actor to the array
@@ -68,7 +90,8 @@ $(function () {
       return newActorsArr;
     }
   }
-
+  
+  // GAME Object ...................................................
   let game = {
     // Properties
     isGameStarted: false,
@@ -76,7 +99,7 @@ $(function () {
     possibleActorsArr: [],
     selectedChampion: '',
     selectedEnemy: '',
-    wins = 0,
+    wins: 0,
     // Game initialization
     initializeGame(gameType) {
       // Indicate game has started
@@ -89,26 +112,26 @@ $(function () {
       this.disableAttackButton();
       this.hideResetButton();
       // messages to the user
-      this.displayMessageTop('Welcome to the RBG game! Select your character...');
+      this.displayMessageTop('Welcome! Select your character...');
       this.displayMessageBottom('');
       //log key info
       console.log(this.phase);
     },
     resetGame() {
       // clear all elemenst in screen
-     $('#possibleActors').empty();
-     $('#selectedChampion').empty();
-     $('#possibleEnemies').empty();
-     $('#selectedEnemy').empty();
-     // initialize key values
-     this.phase = gamePhase0;
-     this.possibleActorsArr = [];
-     this.selectedChampion = '';
-     this.selectedEnemy='';
-     this.wins = 0;
-     // Restart the game
-     this.initializeGame('restart');
-   },
+      $('#possibleActors').empty();
+      $('#selectedChampion').empty();
+      $('#possibleEnemies').empty();
+      $('#selectedEnemy').empty();
+      // initialize key values
+      this.phase = gamePhase0;
+      this.possibleActorsArr = [];
+      this.selectedChampion = '';
+      this.selectedEnemy = '';
+      this.wins = 0;
+      // Restart the game
+      this.initializeGame('restart');
+    },
     disableAttackButton() {
       $('#btnAttack').removeClass('btn-lg');
       $('#btnAttack').removeClass('btn-danger');
@@ -128,20 +151,18 @@ $(function () {
       $('#btnReset').addClass('d-block');
     },
     displayMessageTop(msg) {
-       if (msg === ''){
+      if (msg === '') {
         $('#gameMsgTop').empty();
-       }
-       else {
+      } else {
         $('#gameMsgTop').html(msg);
-       }
+      }
     },
     displayMessageBottom(msg) {
-      if (msg === ''){
+      if (msg === '') {
         $('#gameMstBottom').empty();
-       }
-       else {
+      } else {
         $('#gameMstBottom').html(msg);
-       }
+      }
     },
     displayPossibleActors() {
       // Build actor card for each pre-defined actors
@@ -174,7 +195,7 @@ $(function () {
     },
     displayEnemyActor() {
       // Build actor card for selected champion
-      let actor = this.isSelectedEnemy;
+      let actor = this.selectedEnemy;
       // Build dive for possible actors
       let actorCard = $(`
       <div class='actorCard enemyCard defenderCard imgRnd10 d-inline-block' data-actor="${actor.actorId}">
@@ -218,7 +239,8 @@ $(function () {
         }
       })
       //log key info
-      console.log('Champion: ' + this.selectedChampion.name + ' Ch: ' + this.selectedChampion.isSelectedChampion);
+      console.log('Champion: ' + this.selectedChampion.name);
+      console.log('is Champion?: ' + this.selectedChampion.isSelectedChampion);
       console.log(this.phase);
       // clear all possible actors
       $('#possibleActors').empty();
@@ -227,7 +249,7 @@ $(function () {
       // Display possible enemies
       this.displayPossibleEnemies();
       // messages to the user
-      this.displayMessageTop('Now, select your first oponent!');
+      this.displayMessageTop('Select your oponent ...');
       this.displayMessageBottom('');
     },
     selectEnemy(actorId) {
@@ -238,14 +260,15 @@ $(function () {
       this.possibleActorsArr.forEach(function (actor) {
         // if actorID matches, mark as chamption
         if (actor.actorId === actorId) {
-          actor.isSelectedChampion = true;
+          actor.isSelectedEnemy = true;
           // Store selected actor (game.selectActor can be used also)
           thisObj.selectedEnemy = actor;
           thisObj.phase = gamePhase3;
         }
       })
       //log key info
-      console.log('Enemy: ' + this.isSelectedEnemy.name + ' En: ' + this.selectedEnemy.isSelectedEnemy);
+      console.log('Enemy: ' + this.selectedEnemy.name);
+      console.log('is Enemy: ' + this.selectedEnemy.isSelectedEnemy);
       console.log(this.phase);
       // clear all possible actors
       $('#possibleEnemies').empty();
@@ -258,21 +281,27 @@ $(function () {
       // messages to the user
       this.displayMessageTop('Ready? press the Attack button!');
       this.displayMessageBottom('');
+    },
+    attack() {
+
+    },
+    counterAttack() {
+
     }
 
   } // end game object
 
-  // Initialize game
+  // Initialize game .....................................................
   game.initializeGame('new');
   console.log('Phase: ' + game.phase);
-  
+
   // Envents selecting teh characters to fight
   $(document).on('click', '.actorCard', function () {
 
     // get actorid from html attributes
     let actorId = $(this).attr('data-actor');
     console.log(actorId);
-    
+
     // Depending on phase, select champion or enemy
     switch (game.phase) {
       case gamePhase1:
@@ -286,10 +315,10 @@ $(function () {
     }
   })
 
-  $(document).on('click','#btnAttack', function() {
+  $(document).on('click', '#btnAttack', function () {
 
     console.log('btn attack pressed');
-    
+
     // make an attack from champion to enemy 
 
     // If champion helath points are zero or less, user lose the game
@@ -301,11 +330,11 @@ $(function () {
 
   })
 
-  $(document).on('click','#btnReset', function() {
+  $(document).on('click', '#btnReset', function () {
 
     console.log('btn attack pressed');
 
-  }
+  })
 
 
 
