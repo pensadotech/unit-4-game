@@ -3,7 +3,7 @@
 $(function () {
 
   console.log("Star wars RBC game");
-
+  
   // ACTOR Object constructor .........................................
   function actor(id, name, healthPoints, attackPower, counterAttackPower, imageFile, minPower) {
     this.actorId = id;
@@ -415,7 +415,7 @@ $(function () {
       this.displayMessageBottom(''); // clear bottom message
     },
     counterAttack() {
-       
+
       attackSound.play();
 
       // Initial Numbers
@@ -461,7 +461,7 @@ $(function () {
         this.selectedEnemy.isDefitedEnemy = true;
         game.wins += 1;
         selectedEnemy = '';
-        $('#selectedEnemy').fadeOut(2000);
+        $('#selectedEnemy').fadeOut(1000);
         this.displayMessageTop('');
         this.displayMessageBottom('');
 
@@ -494,14 +494,15 @@ $(function () {
 
 
   // Initialize game .....................................................
-  game.initializeGame('new');
 
   // Sounds
-  selectSound = new sound('./assets/sounds/selectSound.mp3')
-  attackSound = new sound('./assets/sounds/laserSound.mp3');
-  loseSound = new sound('./assets/sounds/loseSound.mp3');
-  winSound = new sound('./assets/sounds/winSound.mp3');
+  let selectSound = new sound('./assets/sounds/selectSound.mp3')
+  let attackSound = new sound('./assets/sounds/laserSound.mp3');
+  let loseSound = new sound('./assets/sounds/loseSound.mp3');
+  let winSound = new sound('./assets/sounds/winSound.mp3');
 
+  // start game
+  game.initializeGame('new');
   console.log('Phase: ' + game.phase);
   console.log(game.possibleActorsArr);
 
@@ -511,6 +512,7 @@ $(function () {
   $(document).on('click', '.actorCard', function () {
 
     if (game.isGameStarted) {
+
       // get actorid from html attributes
       let actorId = $(this).attr('data-actor');
       console.log('Selected Actor:' + actorId);
@@ -557,7 +559,6 @@ $(function () {
     }
 
   }) //  $(document).on('click', '#btnReset'
-
 
   //  Functions ......................................................
   function sound(src) {
