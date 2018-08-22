@@ -1,4 +1,4 @@
-# Option Two: Star Wars RPG Game (Challenge)
+# Star Wars RPG Game (Challenge)
 
 ##  What the project does
 
@@ -22,7 +22,7 @@
 
 4. The player wins the game by defeating all enemy characters. The player loses the game the game if their character's `HP` falls to zero or below.
 
-##### Option 2 Game design notes
+##### Game design notes
 
 * Each character in the game has 3 attributes: `Health Points`, `Attack Power` and `Counter Attack Power`.
 
@@ -42,11 +42,19 @@
 
 ## Why the project is useful
 
+This is a good exercise to process events using JQuery
+
 ## How users can get started with the project
+
+This project is a good reference for people learning Web development.
+Fork teh project and feel free toplay with teh code.
 
 ## Where users can get help with your project
 
-## Who maintains and contributes to the project
+Teh programming used here is very standard, websites like W3scools.com offer good material for beginners.
+There are plenty resources in the Internet to understand the programming used here.
 
+## Who maintains and contributes to the project
+This is a personal project for practicing JQuery.
 
 
