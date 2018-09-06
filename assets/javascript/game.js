@@ -1,9 +1,7 @@
 // Star war RBG game - javaScript 
 
 $(function () {
-
-  console.log("Star wars RBC game");
-  
+ 
   // ACTOR Object constructor .........................................
   function actor(id, name, healthPoints, attackPower, counterAttackPower, imageFile, minPower) {
     this.actorId = id;
@@ -153,8 +151,6 @@ $(function () {
       this.setMessagesNormal();
       this.displayMessageTop('Welcome! Select your character...');
       this.displayMessageBottom('');
-      //log key info
-      console.log(this.phase);
     },
     resetGame() {
       // clear all elemenst in screen
@@ -322,10 +318,6 @@ $(function () {
           selectSound.play();
         }
       })
-      //log key info
-      console.log('Champion: ' + this.selectedChampion.name);
-      console.log('is Champion?: ' + this.selectedChampion.isSelectedChampion);
-      console.log(this.phase);
       if (this.selectedChampion !== '') {
         // Advance game phase
         this.phase = this.gamePhase2;
@@ -354,10 +346,6 @@ $(function () {
           selectSound.play();
         }
       })
-      //log key info
-      console.log('Enemy: ' + this.selectedEnemy.name);
-      console.log('is Enemy: ' + this.selectedEnemy.isSelectedEnemy);
-      console.log(this.phase);
       if (this.selectedEnemy !== '') {
         // advance game phase
         this.phase = this.gamePhase3;
@@ -386,25 +374,15 @@ $(function () {
       return areAnyEnemiesLeft;
     },
     attack() {
-
-      // Initial numbers
-      console.log('Start En Hp: ' + this.selectedEnemy.healthPoints);
-      console.log('max-apwr: ' + this.selectedChampion.attackPower);
-
       // increase Attack number
       let numAttacks = this.selectedChampion.increaseAttacks();
-      console.log('Attack:' + numAttacks);
 
       // Attack power calculation
       // attackPower = random attack power x Number of attacks
-      let aPwrPlus = this.selectedChampion.increasedAttackPower();
-      console.log('aPwr++:' + aPwrPlus);
+      let aPwrPlus = this.selectedChampion.increasedAttackPower();;
 
       // Affect the enemy health
       this.selectedEnemy.healthPoints -= aPwrPlus;
-
-      // ending nunmbers
-      console.log('end En Hp: ' + this.selectedEnemy.healthPoints);
 
       // Display possible enemies
       this.displayEnemyActor();
@@ -418,19 +396,11 @@ $(function () {
 
       attackSound.play();
 
-      // Initial Numbers
-      console.log('Start Ch Hp: ' + this.selectedChampion.healthPoints);
-      console.log('max capwr: ' + this.selectedEnemy.counterAttackPower);
-
       // counter Attack power calculation
       let caPwr = this.selectedEnemy.randomCounterAttackPower();
-      console.log('caPwr:' + caPwr);
 
       // Affect the champion health
       this.selectedChampion.healthPoints -= caPwr;
-
-      // ending numbers
-      console.log('Ch Hp: ' + this.selectedChampion.healthPoints);
 
       // Display selected actor
       this.displayChampionActor();
@@ -503,8 +473,6 @@ $(function () {
 
   // start game
   game.initializeGame('new');
-  console.log('Phase: ' + game.phase);
-  console.log(game.possibleActorsArr);
 
   // Envents ....................................................
 
@@ -515,7 +483,6 @@ $(function () {
 
       // get actorid from html attributes
       let actorId = $(this).attr('data-actor');
-      console.log('Selected Actor:' + actorId);
 
       // Depending on phase, select champion or enemy
       switch (game.phase) {
@@ -535,8 +502,6 @@ $(function () {
   // Attacking
   $(document).on('click', '#btnAttack', function () {
 
-    console.log('btn attack pressed');
-
     if (game.isGameStarted && game.phase === game.gamePhase3) {
       // Champion attacks enemy
       game.attack();
@@ -550,8 +515,6 @@ $(function () {
 
   // Reseting the game 
   $(document).on('click', '#btnReset', function () {
-
-    console.log('btn reset pressed');
 
     if (game.isGameOver) {
       // reset values and start again
