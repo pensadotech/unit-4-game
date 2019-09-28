@@ -1,60 +1,44 @@
-# Star Wars RPG Game (Challenge)
+# Start Wars RPC game
 
-##  What the project does
+Four start wars character face each other in combat.
 
-2. Here's how the app works:
+_By Armando Pensado_
 
-   * When the game starts, the player will choose a character by clicking on the fighter's picture. The player will fight as that character for the rest of the game.
+## Description
 
-   * The player must then defeat all of the remaining fighters. Enemies should be moved to a different area of the screen.
+This project is a simple combat game that includes four start wars characters. Each time the game is started, the characters receive at random a power level and health level.  The user must choose one of the four characters (main character) and confront in battle the remaining ones (Defender). 
 
-   * The player chooses an opponent by clicking on an enemy's picture.
+In every combat the main character will be affected, loosing health points at random. In order to win the game, the main character need to survive and defeat all of the three defender characters. 
 
-   * Once the player selects an opponent, that enemy is moved to a `defender area`.
+The player will choose one opponent at a time, and use the attack button multiple times until the opponent is eliminated or the man character perish in combat.
 
-   * The player will now be able to click the `attack` button.
-     * Whenever the player clicks `attack`, their character damages the defender. The opponent will lose `HP` (health points). These points are displayed at the bottom of the defender's picture. 
-     * The opponent character will instantly counter the attack. When that happens, the player's character will lose some of their `HP`. These points are shown at the bottom of the player character's picture.
+![MainPage](./docs/StarWarsGame.png)
 
-3. The player will keep hitting the attack button in an effort to defeat their opponent.
+## Who can benefit from this application
 
-   * When the defender's `HP` is reduced to zero or below, remove the enemy from the `defender area`. The player character can now choose a new opponent.
+This project is a good example for beginner web developers that are learning HTML, CSS, and JQuery. 
 
-4. The player wins the game by defeating all enemy characters. The player loses the game the game if their character's `HP` falls to zero or below.
+## How developers can get started
 
-##### Game design notes
+The developer is welcome to clone or download the project to the personal device. The project can be executed in any browser, and can be visualized using MS Visual code. 
 
-* Each character in the game has 3 attributes: `Health Points`, `Attack Power` and `Counter Attack Power`.
+There is not specials initialization instructions, as it is plain HTML, CSS, and JQuery. 
 
-* Each time the player attacks, their character's Attack Power increases by its base Attack Power. 
-  * For example, if the base Attack Power is 6, each attack will increase the Attack Power by 6 (12, 18, 24, 30 and so on).
-* The enemy character only has `Counter Attack Power`. 
+The developer will find a game.js file that contains the core of the functionality. In there, the **'game'** object represents the game, and it uses the **actorGenerator** object to set teh four characters.
 
-  * Unlike the player's `Attack Points`, `Counter Attack Power` never changes.
+The bottom section has the events for controlling the user input and process teh selections.  
 
-* The `Health Points`, `Attack Power` and `Counter Attack Power` of each character must differ.
+After cloning the application and using Microsoft Visual Studio, the project folder should resemble as depicted below.
 
-* No characters in the game can heal or recover Health Points. 
-
-  * A winning player must pick their characters wisely by first fighting an enemy with low `Counter Attack Power`. This will allow them to grind `Attack Power` and to take on enemies before they lose all of their `Health Points`. Healing options would mess with this dynamic.
-
-* Your players should be able to win and lose the game no matter what character they choose. The challenge should come from picking the right enemies, not choosing the strongest player.
-
-## Why the project is useful
-
-This is a good exercise to process events using JQuery
-
-## How users can get started with the project
-
-This project is a good reference for people learning Web development.
-Fork teh project and feel free toplay with teh code.
-
-## Where users can get help with your project
-
-Teh programming used here is very standard, websites like W3scools.com offer good material for beginners.
-There are plenty resources in the Internet to understand the programming used here.
+![ProjectLayout](./docs/GameLayout.png)
 
 ## Who maintains and contributes to the project
-This is a personal project for practicing JQuery.
 
+This is a project for my personal learning process.
 
+## Project references
+
+* JQuery : https://jquery.com/
+* w3schools JQuery tutotials : https://www.w3schools.com/jquery/default.asp
+* w3schools HTML tutorials : https://www.w3schools.com/html/default.asp
+* w3schools CSS tutorials : https://www.w3schools.com/css/default.asp
